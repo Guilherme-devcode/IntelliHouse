@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:ui_common/ui_common.dart';
+import 'dart:ui'; // Add this import for ImageFilter
 
-import '../../../core.dart';
+import 'package:flutter/material.dart';
 
 class SHCard extends StatelessWidget {
   const SHCard({
-    super.key,
+    Key? key,
     this.height,
     this.children = const [],
     this.childrenPadding = EdgeInsets.zero,
-  });
+  }) : super(key: key);
 
   final double? height;
   final List<Widget> children;
@@ -19,33 +18,36 @@ class SHCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      child: DecoratedBox(
+      child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: SHColors.cardColors,
-          ),
-          boxShadow: const [
+          color: Colors.black.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
             BoxShadow(
-              color: Colors.black38,
-              blurRadius: 20,
-              offset: Offset(-10, 10),
-            ),
+              color: Colors.white.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: Offset(0, 3),
+            )
           ],
-          borderRadius: 12.borderRadiusA,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (int index = 0; index < children.length; index++) ...[
-              Padding(
-                padding: childrenPadding,
-                child: children[index],
-              ),
-              if (index < children.length - 1) const SHDivider(),
-            ],
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (int index = 0; index < children.length; index++) ...[
+                  Padding(
+                    padding: childrenPadding,
+                    child: children[index],
+                  ),
+                  if (index < children.length - 1) const Divider(),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
